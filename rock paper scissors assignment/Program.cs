@@ -6,17 +6,19 @@ namespace RockPaperScissorsSummative
     {
         static void Main(string[] args)
         {
-            // --- 1. Game Setup & Variables ---
-            int playerMoney = 100; // Starting money for betting system
+            game();
+            Song();
+        }
+        public static void game()
+        {
+            int playerMoney = 100;
             int totalWins = 0;
             int totalLosses = 0;
             int totalDraws = 0;
             int roundsPlayed = 0;
-
+            new Thread(() => Song()).Start();
             Random random = new Random();
             string[] choices = { "rock", "paper", "scissors" };
-
-            // --- 2. Introduction ---
             Console.WriteLine("========================================");
             Console.WriteLine("  WELCOME TO ROCK, PAPER, SCISSORS!     ");
             Console.WriteLine("========================================");
@@ -26,20 +28,17 @@ namespace RockPaperScissorsSummative
             Console.WriteLine("========================================");
             Console.WriteLine();
 
-            // --- 3. Main Game Loop ---
             while (playerMoney > 0)
             {
                 Console.WriteLine($"Current Balance: ${playerMoney}");
                 Console.Write("Enter your bet amount (or 0 to quit): ");
                 string betInput = Console.ReadLine().Trim();
 
-                // Check for quit intent in bet input
                 if (betInput.Equals("quit", StringComparison.OrdinalIgnoreCase) || betInput == "0")
                 {
                     break;
                 }
 
-                // Bet Validation
                 if (!int.TryParse(betInput, out int currentBet) || currentBet < 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -58,27 +57,23 @@ namespace RockPaperScissorsSummative
                     continue;
                 }
 
-                // --- 4. Get User Choice ---
                 Console.Write("Choose [Rock], [Paper], [Scissors], or type [Quit]: ");
                 string playerChoice = Console.ReadLine().Trim().ToLower();
 
-                // Check for quit
                 if (playerChoice == "quit")
                 {
                     break;
                 }
 
-                // Choice Validation
                 if (playerChoice != "rock" && playerChoice != "paper" && playerChoice != "scissors")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid choice! Please choose Rock, Paper, or Scissors.");
                     Console.ResetColor();
                     Console.WriteLine();
-                    continue; // Skip the rest of the loop and restart the round
+                    continue;
                 }
 
-                // --- 5. Generate Computer Choice ---
                 int computerIndex = random.Next(0, 3);
                 string computerChoice = choices[computerIndex];
 
@@ -86,7 +81,6 @@ namespace RockPaperScissorsSummative
                 Console.WriteLine($"-> You chose: {char.ToUpper(playerChoice[0]) + playerChoice.Substring(1)}");
                 Console.WriteLine($"-> Computer chose: {char.ToUpper(computerChoice[0]) + computerChoice.Substring(1)}");
 
-                // --- 6. Compare Choices & Determine Results ---
                 if (playerChoice == computerChoice)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -115,7 +109,6 @@ namespace RockPaperScissorsSummative
 
                 roundsPlayed++;
 
-                // --- 7. Output Stats ---
                 double winRate = roundsPlayed > 0 ? ((double)totalWins / roundsPlayed) * 100 : 0;
 
                 Console.WriteLine("\n--- CURRENT STATISTICS ---");
@@ -123,7 +116,6 @@ namespace RockPaperScissorsSummative
                 Console.WriteLine($"Win Rate: {winRate:F1}%");
                 Console.WriteLine("--------------------------\n");
 
-                // Check if bankrupt
                 if (playerMoney <= 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -132,7 +124,6 @@ namespace RockPaperScissorsSummative
                 }
             }
 
-            // --- 8. Final End Game Output ---
             Console.WriteLine();
             Console.WriteLine("========================================");
             Console.WriteLine("        FINAL TOURNAMENT RESULTS        ");
@@ -149,5 +140,52 @@ namespace RockPaperScissorsSummative
             Console.WriteLine("Thank you for playing!");
             Console.ReadLine();
         }
+        public static void Song()
+        {
+            const int Quarter = 375;
+            const int Eighth = Quarter / 2;
+            const int Half = Quarter * 2;
+            const int Whole = Quarter * 4;
+
+            // Frequencies for C# Minor scale notes (Octave 4/5)
+            const int Csh4 = 277;
+            const int Dsh4 = 311;
+            const int E4 = 330;
+            const int Fsh4 = 370;
+            const int Gsh4 = 415;
+            const int Ash4 = 466;
+            const int B4 = 494;
+            const int Csh5 = 554;
+            const int Dsh5 = 622;
+            const int E5 = 659;
+            const int A9 = 440;
+
+
+            // --- Chorus Opening Phrase ---
+            Console.Beep(Gsh4, Quarter);
+            Console.Beep(Csh5, Quarter);
+            Console.Beep(Dsh5, Quarter);
+            Console.Beep(E5, Half);
+            Thread.Sleep(Eighth); // Brief programmatic rest
+
+            Console.Beep(Dsh5, Quarter);
+            Console.Beep(Csh5, Quarter);
+            Console.Beep(B4, Quarter);
+            Console.Beep(Gsh4, Whole);
+
+            // --- Second Phrase ---
+            Console.Beep(A9, Quarter);
+            Console.Beep(Csh5, Quarter);
+            Console.Beep(E5, Quarter);
+            Console.Beep(Dsh5, Half);
+            Thread.Sleep(Eighth);
+
+            Console.Beep(Csh5, Quarter);
+            Console.Beep(B4, Quarter);
+            Console.Beep(Gsh4, Quarter);
+            Console.Beep(Csh4, Whole);
+
+        }
+
     }
 }
